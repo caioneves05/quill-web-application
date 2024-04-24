@@ -1,14 +1,20 @@
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/router"
+import { trpc } from "../_trpc/client"
 
-const Page = () => {
+const Page = async () => {
     const router = useRouter()
 
     const searchParamas = useSearchParams()
 
     const origin = searchParamas.get('origin')
 
-    const apiResponse = await 
+    const { success } =  await trpc.authCallback.query()
+
+    if(success) {
+        // user is synced to db
+        router.push(origin ? `/${origin}` : `/dashboard`)
+    }
 
 }
 
